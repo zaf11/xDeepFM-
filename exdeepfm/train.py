@@ -29,6 +29,7 @@ def create_train_model(model_creator, hparams, scope=None):
 
         if hparams.data_format == 'ffm':
             batch_input = FfmIterator(src_dataset)
+            # print("batch_input:"+str(batch_input.labels.shape))
         elif hparams.data_format == 'din':
             batch_input = DinIterator(src_dataset)
         elif hparams.data_format == 'cccfnet':

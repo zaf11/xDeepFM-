@@ -14,8 +14,9 @@ class BaseModel(object):
         assert isinstance(iterator, BaseIterator)
         tf.set_random_seed(1234)
 
-        # iterator=batch_input,
+        # iterator=batch_input,输入数据
         self.iterator = iterator
+
         self.layer_params = []
         self.embed_params = []
         self.cross_params = []
@@ -31,8 +32,9 @@ class BaseModel(object):
         self.loss = tf.add(self.data_loss, self.regular_loss)
 
         self.saver = tf.train.Saver(max_to_keep=hparams.epochs)
-        self.update = self._build_train_opt(hparams)
+        self.update = self._build_train_opt(hparams)  #train_step
         self.init_op = tf.global_variables_initializer()
+
         self.merged = self._add_summaries()
 
     def _get_pred(self, logit, hparams):
@@ -186,8 +188,7 @@ class BaseModel(object):
         return logit
 
     def train(self, sess):
-        return sess.run([self.update, self.loss, self.data_loss, self.merged], \
-                        feed_dict={self.layer_keeps: self.keep_prob_train})
+        return sess.run([self.update, self.loss, self.data_loss, self.merged], feed_dict={self.layer_keeps: self.keep_prob_train})
 
     def eval(self, sess):
         return sess.run([self.loss, self.data_loss, self.pred, self.iterator.labels], \
