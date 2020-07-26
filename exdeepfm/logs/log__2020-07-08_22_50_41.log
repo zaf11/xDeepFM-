@@ -1,0 +1,108 @@
+train_file:data/dnn/train.userid.txt
+eval_file:data/dnn/val.userid.txt
+test_file:data/dnn/test.userid.txt
+infer_file:data/dnn/infer.userid.txt
+FEATURE_COUNT:194081
+FIELD_COUNT:33
+data_format:ffm
+PAIR_NUM:None
+DNN_FIELD_NUM:None
+n_user:None
+n_item:None
+n_user_attr:None
+n_item_attr:None
+dim:10
+layer_sizes:[100, 100]
+cross_layer_sizes:[100, 100, 50]
+cross_layers:None
+activation:['relu', 'relu']
+cross_activation:identity
+dropout:[0.0, 0.0]
+attention_layer_sizes:None
+attention_activation:None
+model_type:exDeepFM
+method:classification
+load_model_name:None
+mu:None
+init_method:tnormal
+init_value:0.01
+embed_l2:0.0001
+embed_l1:0.0
+layer_l2:0.0001
+layer_l1:0.0
+cross_l2:0.0001
+cross_l1:0.0
+learning_rate:0.0001
+loss:log_loss
+optimizer:adam
+epochs:10
+batch_size:50
+log:log
+logger:<Logger utils.log (INFO)>
+show_step:1
+save_epoch:5
+metrics:['auc', 'logloss']
+split connect
+split connect
+split connect
+no residual network
+data num:100
+data num:100
+at epoch 0 train info: loss:0.9684907644987106 eval info: auc:0.4505, logloss:0.7053 test info: auc:0.4505, logloss:0.7053
+at epoch 0 , train time: 1.7 eval time: 0.2
+
+
+data num:100
+data num:100
+at epoch 1 train info: loss:0.9396404474973679 eval info: auc:0.4726, logloss:0.693 test info: auc:0.4726, logloss:0.693
+at epoch 1 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 2 train info: loss:0.9121831953525543 eval info: auc:0.4859, logloss:0.6811 test info: auc:0.4859, logloss:0.6811
+at epoch 2 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 3 train info: loss:0.8857356011867523 eval info: auc:0.4982, logloss:0.6696 test info: auc:0.4982, logloss:0.6696
+at epoch 3 , train time: 0.3 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 4 train info: loss:0.8602811694145203 eval info: auc:0.5141, logloss:0.6587 test info: auc:0.5141, logloss:0.6587
+at epoch 4 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 5 train info: loss:0.8357797861099243 eval info: auc:0.5274, logloss:0.6483 test info: auc:0.5274, logloss:0.6483
+at epoch 5 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 6 train info: loss:0.8122055977582932 eval info: auc:0.5248, logloss:0.6383 test info: auc:0.5248, logloss:0.6383
+at epoch 6 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 7 train info: loss:0.7895516753196716 eval info: auc:0.5283, logloss:0.6289 test info: auc:0.5283, logloss:0.6289
+at epoch 7 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 8 train info: loss:0.7677767127752304 eval info: auc:0.5318, logloss:0.6199 test info: auc:0.5318, logloss:0.6199
+at epoch 8 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 9 train info: loss:0.7468414753675461 eval info: auc:0.5318, logloss:0.6112 test info: auc:0.5318, logloss:0.6112
+at epoch 9 , train time: 0.4 eval time: 0.1
+
+
