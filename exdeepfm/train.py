@@ -29,7 +29,6 @@ def create_train_model(model_creator, hparams, scope=None):
 
         if hparams.data_format == 'ffm':
             batch_input = FfmIterator(src_dataset)
-            # print("batch_input:"+str(batch_input.labels.shape))
         elif hparams.data_format == 'din':
             batch_input = DinIterator(src_dataset)
         elif hparams.data_format == 'cccfnet':
@@ -107,6 +106,7 @@ def cache_data(hparams, filename, flag):
     if not os.path.exists(util.CACHE_DIR):
         os.mkdir(util.CACHE_DIR)
     if flag == 'train':
+        #hparams.train_file_cache = ./cache/batch_size_128_train.userid.tfrecord
         hparams.train_file_cache = util.convert_cached_name(hparams.train_file, hparams.batch_size)
         cached_name = hparams.train_file_cache
         sample_num_path = util.TRAIN_NUM
@@ -129,6 +129,8 @@ def cache_data(hparams, filename, flag):
     else:
         raise ValueError("flag must be train, eval, test, infer")
     print('cache filename:', filename)
+
+    #如果没有record文件，则开始利用cache_obj转换
     if not os.path.isfile(cached_name):
         print('has not cached file, begin cached...')
         start_time = time.time()
@@ -148,6 +150,7 @@ def train(hparams, scope=None, target_session=""):
         hparams.logger.info(str(key) + ':' + str(val))
 
     print('load and cache data...')
+    # print(hparams.train_file_cache)
     if hparams.train_file is not None:
         cache_data(hparams, hparams.train_file, flag='train')
     if hparams.eval_file is not None:
@@ -156,6 +159,8 @@ def train(hparams, scope=None, target_session=""):
         cache_data(hparams, hparams.test_file, flag='test')
     if hparams.infer_file is not None:
         cache_data(hparams, hparams.infer_file, flag='infer')
+
+    print(hparams.train_file_cache)
 
     if hparams.model_type == 'deepFM':
         model_creator = DeepfmModel
@@ -205,7 +210,10 @@ def train(hparams, scope=None, target_session=""):
 
     # define train,eval,infer graph
     # define train session, eval session, infer session
+
+    #处理数据流程
     train_model = create_train_model(model_creator, hparams, scope)
+
     gpuconfig = tf.ConfigProto()
     gpuconfig.gpu_options.allow_growth = True
     tf.set_random_seed(1234)
@@ -223,10 +231,12 @@ def train(hparams, scope=None, target_session=""):
     print('total_loss = data_loss+regularization_loss, data_loss = {rmse or logloss ..}')
     writer = tf.summary.FileWriter(util.SUMMARIES_DIR, train_sess.graph)
     last_eval = 0
+
     for epoch in range(hparams.epochs):
         step = 0
         print("初始化参数")
         train_sess.run(train_model.iterator.initializer, feed_dict={train_model.filenames: [hparams.train_file_cache]})
+
         epoch_loss = 0
         train_start = time.time()
         train_load_time = 0
@@ -234,6 +244,7 @@ def train(hparams, scope=None, target_session=""):
             try:
                 t1 = time.time()
                 step_result = train_model.model.train(train_sess)
+
                 t3 = time.time()
                 train_load_time += t3 - t1
                 (_, step_loss, step_data_loss, summary) = step_result

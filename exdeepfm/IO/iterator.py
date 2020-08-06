@@ -26,10 +26,13 @@ class FfmIterator(BaseIterator):
         src_dataset = src_dataset.map(self.parser)
         # src_dataset = src_dataset.shuffle(buffer_size=BUFFER_SIZE)
         iterator = src_dataset.make_initializable_iterator()
+
         _fm_feat_indices, _fm_feat_values, \
         _fm_feat_shape, _labels, _dnn_feat_indices, \
         _dnn_feat_values, _dnn_feat_weights, _dnn_feat_shape = iterator.get_next()
+
         self.initializer = iterator.initializer
+
         self.fm_feat_indices = _fm_feat_indices
         self.fm_feat_values = _fm_feat_values
         self.fm_feat_shape = _fm_feat_shape
@@ -51,6 +54,7 @@ class FfmIterator(BaseIterator):
             'dnn_feat_shape': tf.FixedLenFeature([2], tf.int64),
         }
         parsed = tf.parse_single_example(record, keys_to_features)
+
         fm_feat_indices = tf.reshape(tf.decode_raw(parsed['fm_feat_indices'], tf.int64), [-1, 2])
         fm_feat_values = tf.sparse_tensor_to_dense(parsed['fm_feat_values'])
         fm_feat_shape = parsed['fm_feat_shape']
@@ -59,9 +63,8 @@ class FfmIterator(BaseIterator):
         dnn_feat_values = tf.sparse_tensor_to_dense(parsed['dnn_feat_values'])
         dnn_feat_weights = tf.sparse_tensor_to_dense(parsed['dnn_feat_weights'])
         dnn_feat_shape = parsed['dnn_feat_shape']
-        return fm_feat_indices, fm_feat_values, \
-               fm_feat_shape, labels, dnn_feat_indices, \
-               dnn_feat_values, dnn_feat_weights, dnn_feat_shape
+
+        return fm_feat_indices, fm_feat_values, fm_feat_shape, labels, dnn_feat_indices, dnn_feat_values, dnn_feat_weights, dnn_feat_shape
 
 
 class DinIterator(BaseIterator):
