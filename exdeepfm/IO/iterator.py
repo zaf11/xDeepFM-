@@ -37,6 +37,7 @@ class FfmIterator(BaseIterator):
         self.fm_feat_values = _fm_feat_values
         self.fm_feat_shape = _fm_feat_shape
         self.labels = _labels
+
         self.dnn_feat_indices = _dnn_feat_indices
         self.dnn_feat_values = _dnn_feat_values
         self.dnn_feat_weights = _dnn_feat_weights

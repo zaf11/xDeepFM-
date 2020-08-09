@@ -10,6 +10,27 @@ __all__ = ["FfmCache"]
 
 class FfmCache(BaseCache):
     # field index start by 1, feat index start by 1
+    """
+    1        :label
+    field index : feature index : value
+    1:2123:1
+    1:2459:1
+    2:3427:1
+    3:7213:1
+    3:7754:1
+    3:8371:1
+    3:8772:1
+    3:9297:1
+    3:10031:1
+    3:10445:1
+    3:10894:1
+    3:13488:1
+    3:13736:1
+    ......
+    32:193861:0.00147454717351568
+    33:194011:1 % ID_118
+    ID_118 :impression_id
+    """
     def _load_batch_data_from_file(self, file, hparams):
         batch_size = hparams.batch_size
         labels = []
@@ -52,7 +73,7 @@ class FfmCache(BaseCache):
         if cnt > 0:
             yield labels, features, impression_id
 
-    def _convert_data(self, labels, features, hparams):
+    def _convert_data(self, labels, features, hparams, cnt, sample_num):
         dim = hparams.FEATURE_COUNT
         FIELD_COUNT = hparams.FIELD_COUNT
         instance_cnt = len(labels)
@@ -67,7 +88,7 @@ class FfmCache(BaseCache):
         dnn_feat_shape = [instance_cnt * FIELD_COUNT, -1]
 
         for i in range(instance_cnt):
-            m = len(features[i])
+            m = len(features[i])#每行数据的列数,除去label
             dnn_feat_dic = {}
             for j in range(m):
                 fm_feat_indices.append([i, features[i][j][1]])
@@ -76,12 +97,20 @@ class FfmCache(BaseCache):
                     dnn_feat_dic[features[i][j][0]] = 0
                 else:
                     dnn_feat_dic[features[i][j][0]] += 1
+
                 dnn_feat_indices.append([i * FIELD_COUNT + features[i][j][0], \
                                          dnn_feat_dic[features[i][j][0]]])
                 dnn_feat_values.append(features[i][j][1])
                 dnn_feat_weights.append(features[i][j][2])
                 if dnn_feat_shape[1] < dnn_feat_dic[features[i][j][0]]:
                     dnn_feat_shape[1] = dnn_feat_dic[features[i][j][0]]
+            # ---------------------------------看到这了----------------------------------------------
+            if cnt==2 and i==0:
+                print("sample_num:"+str(sample_num))
+                print("打印dnn_feat_indices:"+str(dnn_feat_indices))
+                print("打印dnn_feat_values:" + str(dnn_feat_values))
+                print("打印dnn_feat_weights:" + str(dnn_feat_weights))
+                print("打印dnn_feat_shape:" + str(dnn_feat_shape))
         dnn_feat_shape[1] += 1
 
         sorted_index = sorted(range(len(dnn_feat_indices)),
@@ -106,11 +135,15 @@ class FfmCache(BaseCache):
         writer = tf.python_io.TFRecordWriter(outfile)
         feature_cnt = defaultdict(lambda: 0)
         impression_id_list = []
+
+        cnt = 0
         try:
+
             for labels, features, impression_id in self._load_batch_data_from_file(infile, hparams):
+                cnt += 1
                 impression_id_list.extend(impression_id)
                 sample_num += len(labels)
-                input_in_sp = self._convert_data(labels, features, hparams)
+                input_in_sp = self._convert_data(labels, features, hparams, cnt, sample_num)
                 fm_feat_indices = input_in_sp['fm_feat_indices']
 
                 for feat in fm_feat_indices:

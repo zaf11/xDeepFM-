@@ -1,0 +1,78 @@
+train_file:data/dnn/train.userid.txt
+eval_file:data/dnn/val.userid.txt
+test_file:data/dnn/test.userid.txt
+infer_file:data/dnn/infer.userid.txt
+FEATURE_COUNT:194081
+FIELD_COUNT:33
+data_format:ffm
+PAIR_NUM:None
+DNN_FIELD_NUM:None
+n_user:None
+n_item:None
+n_user_attr:None
+n_item_attr:None
+dim:10
+layer_sizes:[100, 100]
+cross_layer_sizes:[100, 100, 50]
+cross_layers:None
+activation:['relu', 'relu']
+cross_activation:identity
+dropout:[0.0, 0.0]
+attention_layer_sizes:None
+attention_activation:None
+model_type:exDeepFM
+method:classification
+load_model_name:None
+mu:None
+init_method:tnormal
+init_value:0.01
+embed_l2:0.0001
+embed_l1:0.0
+layer_l2:0.0001
+layer_l1:0.0
+cross_l2:0.0001
+cross_l1:0.0
+learning_rate:0.0001
+loss:log_loss
+optimizer:adam
+epochs:5
+batch_size:128
+log:log
+logger:<Logger utils.log (INFO)>
+show_step:1
+save_epoch:5
+metrics:['auc', 'logloss']
+split connect
+split connect
+split connect
+no residual network
+data num:100
+data num:100
+at epoch 0 train info: loss:0.976396232843399 eval info: auc:0.4363, logloss:0.7107 test info: auc:0.4363, logloss:0.7107
+at epoch 0 , train time: 1.7 eval time: 0.2
+
+
+data num:100
+data num:100
+at epoch 1 train info: loss:0.9601722359657288 eval info: auc:0.4531, logloss:0.7038 test info: auc:0.4531, logloss:0.7038
+at epoch 1 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 2 train info: loss:0.9444210529327393 eval info: auc:0.4646, logloss:0.697 test info: auc:0.4646, logloss:0.697
+at epoch 2 , train time: 0.4 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 3 train info: loss:0.9289771020412445 eval info: auc:0.4752, logloss:0.6904 test info: auc:0.4752, logloss:0.6904
+at epoch 3 , train time: 0.3 eval time: 0.1
+
+
+data num:100
+data num:100
+at epoch 4 train info: loss:0.91383096575737 eval info: auc:0.4867, logloss:0.6838 test info: auc:0.4867, logloss:0.6838
+at epoch 4 , train time: 0.3 eval time: 0.1
+
+
